@@ -21,7 +21,7 @@ The CFDump tag of Adobe's ColdFusion has long been a unique feature of ColdFusio
 		]
 	};
     
-And then try to output this with **console.log(user)** we get:
+And then try to output this with `console.log(user)` we get:
 
     { firstName: 'Charles',
         lastName: 'Teague',
@@ -31,5 +31,5 @@ And then try to output this with **console.log(user)** we get:
         [ { name: 'Allaire Spectra', status: 'Horrible death' },
         { name: 'ColdFusion 4.5', status: 'Been there done that' } ] }
         
-Which is typical output we have to rely on usually to do our debugging, confirmations, etc. With **nodedump(user)**, the output looks like:
+Which is typical output we have to rely on usually to do our debugging, confirmations, etc. With `nodedump(user)`, the output looks like:
      
