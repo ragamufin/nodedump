@@ -41,7 +41,7 @@ INSTALLATION
 Run this from your Bash or Command line:
 
 ```bash
-$ [sudo] npm install nodedump
+$ [sudo] npm install -g nodedump
 ```
 
 
