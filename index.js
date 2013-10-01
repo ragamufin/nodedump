@@ -1,7 +1,7 @@
 var http = require('http');
 var path = require("path");
 var fs = require("fs");
-//var nd = require('./nodedump').nodedump(http);
+
 var nd = require('./nodedump').init({
 	dumpFunctionName:'dump'
 	//,syntaxHighlight: false
@@ -16,26 +16,7 @@ var server = http.createServer(function(request, response) {
 	if (request.url !== '/') {
 		return serveStaticFiles(request, response);
 	}
-//	if (request.url === '/favicon.ico') {
-//		response.writeHead(200, {'Content-Type': 'image/x-icon'} );
-//		response.end();
-//		console.log('favicon requested');
-//		return;
-//	}
-	//console.log('this:',typeof(this));
-	//var toClass = {}.toString;
-	//console.log('this:',toClass.call( this ));
-	//console.log('this:',this instanceof http);
-	//nodedump(http);
-	//nodedump(this);
-	//nodedump(request, response);
-	//response.writeHead(200, {"Content-Type": "text/plain"});
 	response.writeHead(200, {"Content-Type": "text/html"});
-	//response.write("Hello World Yes!\n\n");
-	//var output = nd.dump({test: 'hi', val:'this is the first'});
-	//var output = nd.dump(['test','here']);
-	//var output = nd.dump('here');
-	//var output = nd.dump(123);
 	var obj = {
 		test_string: 'hi'
 		,test_string2:'this is the first'
@@ -52,11 +33,6 @@ var server = http.createServer(function(request, response) {
 		,bool_test: true
 		,bool_test_false: false
 		,empty_string_test: ''
-//		,function_test: function(arg1, arg2){
-//			var xyz = 223;
-//			var b = '<br><bold>Hi there</bold><i> beautiful world!</i><br /><br />Sweet!';
-//			return xyz;
-//		}
 		,function_test2: serveStaticFiles
 		,date_test: new Date()
 		,math_obj: Math
@@ -65,19 +41,29 @@ var server = http.createServer(function(request, response) {
 		,string_object: new String
 	};
 	obj.circular_test = obj;
-//	console.log('typeof process:',typeof process);
-//	console.log('typeof date:',typeof obj.date_test);
-//	console.log('typeof string:',typeof obj.test_string);
-//	console.log('typeof regex:',typeof obj.test_regex);
-//	console.log('typeof null:',typeof obj.null_test);
-//	console.log('typeof undefined:',typeof obj.undefined_test);
-//	console.log('typeof function:',typeof obj.function_test);
-//	console.log('typeof Math:',typeof obj.math_obj);
-//	console.log('typeof fs:',typeof fs);
 	obj.test_array_simple[2] = obj.test_array_simple;
+	
+	var user = {
+		firstName: 'Charles'
+		,lastName: 'Teague'
+		,age: 21
+		,signedIn: false
+		,projects: [
+			{
+				name: 'Allaire Spectra'
+				, status: 'Horrible death'
+			}
+			,{
+				name: 'ColdFusion 4.5'
+				,status: 'Been there done that'
+			}
+		]
+	};
+	
 	var output = '';
 	//output += dump(Object.keys(obj).sort());
-	output += dump(global, {
+	//output += console.log(user);
+	output += dump(user, {
 					//label:'My Var'
 					//,syntaxHighlight: false
 					//,expand: false
@@ -95,11 +81,7 @@ var server = http.createServer(function(request, response) {
 	response.write(
 		'<html>'
 			+ '<head>'
-				+ '<title>nodedump!</title>'
-                //+ '<style type="text/css">table, tr, th, td { border-collapse: collapse; }</style>'
-				//+ '<link href="assets/bootstrap.css" rel="stylesheet">'
-				//+ '<link href="assets/tomorrow.css" rel="stylesheet">'
-				//+ '<link href="assets/googlecode.css" rel="stylesheet">'
+				+ '<title>nodedump example!</title>'
 			+ '</head>'
 			+'<body>'
 				+output

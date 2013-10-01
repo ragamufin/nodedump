@@ -589,8 +589,8 @@ var hljs = new function() {
   }
 }();
 hljs.LANGUAGES['javascript'] = require('./javascript.js')(hljs);
-hljs.LANGUAGES['xml'] = require('./xml.js')(hljs);
-hljs.LANGUAGES['css'] = require('./css.js')(hljs);
-hljs.LANGUAGES['coffeescript'] = require('./coffeescript.js')(hljs);
-hljs.LANGUAGES['json'] = require('./json.js')(hljs);
+//hljs.LANGUAGES['xml'] = require('./xml.js')(hljs);
+//hljs.LANGUAGES['css'] = require('./css.js')(hljs);
+//hljs.LANGUAGES['coffeescript'] = require('./coffeescript.js')(hljs);
+//hljs.LANGUAGES['json'] = require('./json.js')(hljs);
 module.exports = hljs;
