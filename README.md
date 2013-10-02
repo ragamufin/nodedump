@@ -157,7 +157,7 @@ The available options are:
 
 OPTIONS IN ACTION
 -----------------
-`expand` and `label`
+###`expand` and `label`
 
 ```javascript
 nodedump(user1, {expand: false, label: 'User1'});
@@ -168,7 +168,9 @@ Outputs:
 
 ![nodedump example of 'expand' and 'label' options](images_for_readme/nodedump-expandlabel.png "nodedump example of 'expand' and 'label' options")
 
-`top` with an object
+Clicking on the header of collapsed sections will expand them.
+
+###`top` with an object
 
 ```javascript
 nodedump(user, {top:4});
@@ -180,7 +182,7 @@ Outputs:
 
 Notice that though the object has 6 keys, only the top 4 were output.
 
-`top` with an array
+###`top` with an array
 
 ```javascript
 nodedump(user.projects, {top:1});
@@ -189,6 +191,39 @@ nodedump(user.projects, {top:1});
 Outputs:
 
 ![nodedump example of 'top' with an array](images_for_readme/nodedump-topArray.png "nodedump example of 'top' with an array")
+
+###`levels`
+
+```javascript
+nodedump(user, {levels:2});
+```
+
+Outputs:
+
+![nodedump example of 'levels' option](images_for_readme/nodedump-levels.png "nodedump example of 'levels' option")
+
+Notice that in the projects sub-array that the 3rd level is **not** shown.
+
+###`show`
+
+```javascript
+nodedump(user, {show:['signedIn','age','lastName']});
+```
+
+Outputs:
+
+![nodedump example of 'show' option](images_for_readme/nodedump-show.png "nodedump example of 'show' option")
+
+###`hide`
+
+```javascript
+nodedump(user, {hide:['projects']});
+```
+
+Outputs:
+
+![nodedump example of 'hide' option](images_for_readme/nodedump-hide.png "nodedump example of 'hide' option")
+
 
 OVERRIDING DEFAULT OPTIONS
 --------------------------
