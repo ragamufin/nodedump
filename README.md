@@ -4,7 +4,7 @@ Outputs variables in a visual, easy to read format based on Adobe ColdFusion's `
 
 For example, simply doing `nodedump(user)` gives us:
 
-![Alt text](images_for_readme/user1.png "Optional title")
+![nodedump example](images_for_readme/nodedump-user.png "nodedump of variable 'user'")
 
 The above is a dump of the variable `user` created like so:
 ```javascript
@@ -154,4 +154,53 @@ The available options are:
 * `sortKeys` - Boolean. Defaults to `true`. Tells nodedump to output the keys of objects sorted alphabetically. If `false`, keys will be output in whatever order node.js returns them (usually the order in which they were added).
 * `syntaxHighlight` - Boolean. Defaults to `true`. Tells whether or not the dump of functions should be syntax highlighted (color-coded).
 * `dumpFunctionName` - String. Defaults to `'nodedump'`. Name to use for the nodedump function. E.g. if this is changed to `'dump'` then instead of doing `nodedump(vartodump)` you can do `dump(vartodump)`.
+
+OPTIONS IN ACTION
+-----------------
+`expand` and `label`
+
+```javascript
+nodedump(user1, {expand: false, label: 'User1'});
+nodedump(user2, {expand: false, label: 'User 2'});
+```
+
+Outputs:
+
+![nodedump example of 'expand' and 'label' options](images_for_readme/nodedump-expandlabel.png "nodedump example of 'expand' and 'label' options")
+
+`top` with an object
+
+```javascript
+nodedump(user, {top:4});
+```
+
+Outputs:
+
+![nodedump example of 'top' with an object](images_for_readme/nodedump-topObject.png "nodedump example of 'top' with an object")
+
+Notice that though the object has 6 keys, only the top 4 were output.
+
+`top` with an array
+
+```javascript
+nodedump(user.projects, {top:1});
+```
+
+Outputs:
+
+![nodedump example of 'top' with an array](images_for_readme/nodedump-topArray.png "nodedump example of 'top' with an array")
+
+OVERRIDING DEFAULT OPTIONS
+--------------------------
+
+Default options can be overriden by calling the `init` method on nodedump. E.g.
+
+```javascript
+require('nodedump').init({
+	dumpFunctionName: 'dmp'
+	,expand: false
+});
+```
+
+The above would cause you to be able to call nodedump using `dmp(vartodump)` and all nodedumps would be output collapsed by default.
 
