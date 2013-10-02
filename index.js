@@ -48,7 +48,7 @@ var server = http.createServer(function(request, response) {
 	
 	//capture dump
 	console.log(user);
-	var output = nodedump(user.projects, {top:1});
+	var output = nodedump(user, {levels:2});
 	
 	// write response to the browser
 	response.write(
