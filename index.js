@@ -11,7 +11,7 @@ signIn = function(username, password){
 	// user is signedIn
 	this.signedIn = true;
 	return true;
-}
+};
 
 var server = http.createServer(function(request, response) {
 	console.log('Request received',new Date());
@@ -48,8 +48,9 @@ var server = http.createServer(function(request, response) {
 	
 	//capture dump
 	console.log(user);
-	var output = nodedump(user);
-	
+	var output = nodedump(user, {expand: false, label: 'User1'});
+	output += '<br />';
+	output += nodedump(user, {expand: false, label: 'User 2'});
 	// write response to the browser
 	response.write(
 		'<html>'
