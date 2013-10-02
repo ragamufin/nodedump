@@ -8,11 +8,24 @@ For example, simply doing `nodedump(user)` gives us:
 
 The above is a dump of the variable `user` created like so:
 ```javascript
+signIn = function(username, password){
+	// validate username and password
+	if(!validate(username, password))
+		return false;
+	else 
+		updateSession();
+	
+	// user is signedIn
+	this.signedIn = true;
+	return true;
+};
+
 var user = {
 	firstName: 'Charles'
 	,lastName: 'Teague'
 	,age: 21
 	,signedIn: false
+	,signIn: signIn
 	,projects: [
 		{
 			name: 'Allaire Spectra'
@@ -28,12 +41,13 @@ var user = {
 With `console.log(user)` we get:
 ```javascript
 { firstName: 'Charles',
-	lastName: 'Teague',
-	age: 21,
-	signedIn: false,
-	projects:
-		[ { name: 'Allaire Spectra', status: 'Horrible death' },
-			{ name: 'ColdFusion 4.5', status: 'Been there done that' } ] }
+  lastName: 'Teague',
+  age: 21,
+  signedIn: false,
+  signIn: [Function],
+  projects:
+   [ { name: 'Allaire Spectra', status: 'Horrible death' },
+     { name: 'ColdFusion 4.5', status: 'Been there done that' } ] }
 ```
 Which is the typical output we have to rely on usually to do our debugging. As our variables become more complicated this becomes a painful way to know what's going on within them.
 
