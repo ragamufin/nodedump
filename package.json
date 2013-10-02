@@ -1,0 +1,28 @@
+{
+  "name": "nodedump",
+  "version": "0.0.21",
+  "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag",
+  "main": "bin/nodedump",
+  "bin": {
+    "nodedump": "nodedump.js"
+  },
+  "scripts": {
+    "test": "demo/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ragamufin/nodedump.git"
+  },
+  "keywords": [
+    "cfdump",
+    "log",
+    "variable",
+    "debug",
+    "dump"
+  ],
+  "author": "ragamufin",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ragamufin/nodedump/issues"
+  }
+}
