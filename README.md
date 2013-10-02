@@ -1,6 +1,6 @@
 nodedump
 ========
-Outputs variables in a visual, easy to read format based on Adobe ColdFusion's `CFDump` tag. Think of it as `console.log` on steroids.
+Outputs variables in a visual, easy to read format based on Adobe ColdFusion's `CFDump` tag with enhancements unique to node.js such as the syntax highlighting of functions. Think of it as `console.log` on steroids.
 
 For example, simply doing `nodedump(user)` gives us:
 
@@ -66,7 +66,7 @@ nodedump(vartodump);
 
 EXAMPLE 
 -------
-The following example sets up a server, creates a test object and dumps it to the browser.
+The following example sets up a server, creates a test object and dumps it to the browser. Try it!
 ```javascript
 var http = require('http');
 require('nodedump');
@@ -128,3 +128,16 @@ console.log("Server has started.");
 
 OPTIONS
 ---------
+Options can be passed as an object whenever you `nodedump` a variable as the second parameter, e.g. `nodedump(vartodump, options)`
+
+The available options are:
+* `label` - String. Output on the header of the dump.
+* `expand` - Boolean/Array. Defaults to `true`. The dump can be collapsed entirely by passing `false`. Simply click on the headers in order to expand them. An array of types can be passed and the keys of those objects will be expanded while everything else collapsed. For e.g. `['Array', 'Object', 'Function']`
+* `show` - Array. A list of object keys / array positions to show. Others not in the list will be hidden.
+* `hide` - Array. A list of object keys / array positions to hide.
+* `top` - Number. The number of array positions of the dump variable to show. For objects, this is the number of keys of the top level to show.
+* `levels` - Number. How many nested levels of an object to dump down to.
+* `sortKeys` - Boolean. Defaults to `true`. Tells nodedump to output the keys of objects sorted alphabetically. If `false`, keys will be output in whatever order node.js returns them (usually the order in which they were added).
+* `syntaxHighlight` - Boolean. Defaults to `true`. Tells whether or not the dump of functions should be syntax highlighted (color-coded).
+* `dumpFunctionName` - String. Defaults to `'nodedump'`. Name to use for the nodedump function. E.g. if this is changed to `'dump'` then instead of doing `nodedump(vartodump)` you can do `dump(vartodump)`.
+
