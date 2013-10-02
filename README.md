@@ -2,7 +2,7 @@ nodedump
 ==========
 Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDUMP tag. Think of it as `console.log` on steroids.
 
-The CFDump tag of Adobe's ColdFusion has long been a unique feature of ColdFusion that allows developers to at a glance understand what's in object. Once you get accustomed to the color coding and layout of the dumped output, your brain will be able to quickly see and understand what's in any variable you dump with just a glance. Let's take a comparison. If we create the following:
+The CFDump tag of Adobe's ColdFusion has long been a unique feature of ColdFusion that allows developers to understand what's in any variable. Once you get accustomed to the color coding and layout of dumped output, your brain will be able to quickly see and understand what's in any variable you dump with just a glance. Let's take a comparison. If we create the following:
 ```javascript
 var user = {
 	firstName: 'Charles'
@@ -53,10 +53,66 @@ First you need to `require` nodedump:
 require('nodedump');
 ```
 
-Then in your view or wherever you output to the browser, simply do:
+Then in your view or wherever you output to the browser, whenever you want to dump the contents of a variable do:
 ```javascript
 nodedump(vartodump);
 ```
 
 EXAMPLE 
 ---------
+The following example sets up a server, creates a test object and dumps it to the browser.
+```javascript
+var http = require('http');
+require('nodedump');
+
+var server = http.createServer(function(request, response) {
+	console.log('Request received',new Date()	);
+	console.log('url:',request.url);
+	// skip requests for favicon
+	if (request.url.indexOf('favicon.ico') > -1) {
+		console.log('favicon requested');
+		response.writeHead(500);
+		response.end();
+		console.log('Request ended');
+		return;
+	}
+	response.writeHead(200, {"Content-Type": "text/html"});
+	
+	var user = {
+		firstName: 'Charles'
+		,lastName: 'Teague'
+		,age: 21
+		,signedIn: false
+		,projects: [
+			{
+				name: 'Allaire Spectra'
+				, status: 'Horrible death'
+			}
+			,{
+				name: 'ColdFusion 4.5'
+				,status: 'Been there done that'
+			}
+		]
+	};
+	
+	var output = nodedump(user);
+	
+	response.write(
+		'<html>'
+			+ '<head>'
+				+ '<title>nodedump example!</title>'
+			+ '</head>'
+			+'<body>'
+				+output
+			+'</body>'
+		+'</html>'
+	);
+	response.end();
+
+	console.log('Request ended');
+	//console.log('global.bnodedumpinited',global.bnodedumpinited);
+}).listen(3000);
+
+console.log("Server has started.");
+```
+
