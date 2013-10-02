@@ -68,22 +68,18 @@ var CSS = '<style type="text/css">\n'
 table.nodedump {\
 	font-size: x-small;\
 	font-family: verdana, arial, helvetica, sans-serif;\
-	cell-spacing: 2px;\
+	border-spacing: 2px;\
 	background-color: #dddddd;\
 	color: #222222;\
 }\
 table.nodedump .nodedump-label { cursor:pointer; }\
---table.nodedump td, table.nodedump th { background-color: #eeeeee; }\
---table.nodedump { background-color: #aaaaaa; }\
---table.nodedump th { text-align: left; color: white; padding: 5px; background-color: #cccccc; }\
---table.nodedump td { vertical-align : top; padding: 3px; background-color: #eeeeee; }\
 table.nodedump { background-color: #707000; }\
 table.nodedump th { text-align: left; color: white; padding: 5px; background-color: #ADAD00; }\
 table.nodedump td { vertical-align : top; padding: 3px; background-color: #FFFF9E; }\
 \n\
 table.nodedump td.nodedump-data { background-color: #ffffff; }\
 table.nodedump td.nodedump-data pre { line-height:normal; background-color: #ffffff; border:0; padding:0; }\n\
-table.nodedump td.nodedump-data pre code { font-size: small; font-family: Consolas, Menlo, Monaco, Lucida Console, monospace; Courier New, monospace, serif; }\n\
+table.nodedump td.nodedump-data pre code { font-size: small; font-family: Consolas, Menlo, Monaco, Lucida Console, monospace, Courier New, monospace, serif; }\n\
 \n\
 table.nodedump-String { background-color: #888888; }\
 table.nodedump-String td.nodedump-String { background-color: #dddddd; }\
