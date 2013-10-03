@@ -1,5 +1,5 @@
 var http = require('http');
-require('./nodedump');
+nodedump = require('nodedump');
 
 signIn = function(username, password){
 	// validate username and password
@@ -47,7 +47,6 @@ var server = http.createServer(function(request, response) {
 	};
 	
 	//capture dump
-	console.log(user);
 	var output = nodedump(user);
 	
 	// write response to the browser
