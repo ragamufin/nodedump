@@ -4,7 +4,7 @@ Outputs variables in a visual, easy to read format based on Adobe ColdFusion's `
 
 For example, simply doing `nodedump(user)` gives us:
 
-![nodedump example](images_for_readme/nodedump-user.png "nodedump of variable 'user'")
+![nodedump example](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-user.png "nodedump of variable 'user'")
 
 The above is a dump of the variable `user` created like so:
 ```javascript
@@ -165,7 +165,7 @@ nodedump(user2, {expand: false, label: 'User 2'});
 
 Outputs:
 
-![nodedump example of 'expand' and 'label' options](images_for_readme/nodedump-expandlabel.png "nodedump example of 'expand' and 'label' options")
+![nodedump example of 'expand' and 'label' options](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-expandlabel.png "nodedump example of 'expand' and 'label' options")
 
 Clicking on the header of collapsed sections will expand them.
 
@@ -177,7 +177,7 @@ nodedump(user, {top:4});
 
 Outputs:
 
-![nodedump example of 'top' with an object](images_for_readme/nodedump-topObject.png "nodedump example of 'top' with an object")
+![nodedump example of 'top' with an object](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-topObject.png "nodedump example of 'top' with an object")
 
 Notice that though the object has 6 keys, only the top 4 were output.
 
@@ -189,7 +189,7 @@ nodedump(user.projects, {top:1});
 
 Outputs:
 
-![nodedump example of 'top' with an array](images_for_readme/nodedump-topArray.png "nodedump example of 'top' with an array")
+![nodedump example of 'top' with an array](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-topArray.png "nodedump example of 'top' with an array")
 
 ###`levels`
 
@@ -199,7 +199,7 @@ nodedump(user, {levels:2});
 
 Outputs:
 
-![nodedump example of 'levels' option](images_for_readme/nodedump-levels.png "nodedump example of 'levels' option")
+![nodedump example of 'levels' option](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-levels.png "nodedump example of 'levels' option")
 
 Notice that in the projects sub-array that the 3rd level is **not** shown.
 
@@ -211,7 +211,7 @@ nodedump(user, {show:['signedIn','age','lastName']});
 
 Outputs:
 
-![nodedump example of 'show' option](images_for_readme/nodedump-show.png "nodedump example of 'show' option")
+![nodedump example of 'show' option](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-show.png "nodedump example of 'show' option")
 
 ###`hide`
 
@@ -221,7 +221,7 @@ nodedump(user, {hide:['projects']});
 
 Outputs:
 
-![nodedump example of 'hide' option](images_for_readme/nodedump-hide.png "nodedump example of 'hide' option")
+![nodedump example of 'hide' option](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-hide.png "nodedump example of 'hide' option")
 
 
 OVERRIDING DEFAULT OPTIONS
