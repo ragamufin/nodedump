@@ -1,6 +1,6 @@
 {
   "name": "nodedump",
-  "version": "0.0.3",
+  "version": "0.0.32",
   "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag",
   "main": "nodedump.js",
   "scripts": {
