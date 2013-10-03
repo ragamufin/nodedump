@@ -1,7 +1,7 @@
 {
   "name": "nodedump",
   "version": "0.0.32",
-  "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag",
+  "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag. Think of it as console.log on steroids.",
   "main": "nodedump.js",
   "scripts": {
     "test": "echo 'Hello World!'"
@@ -20,7 +20,7 @@
     "cfdump"
   ],
   "author": "andrew hewitt",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ragamufin/nodedump/issues"
   }

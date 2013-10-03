@@ -25,6 +25,7 @@ var DEFAULTOPTS = {
 	,levels: null
 	,sortKeys: true
 	,syntaxHighlight:true
+	,dumpFunctionName: 'nodedump'
 };
 
 // used to figure out the datatype of a variable
@@ -628,7 +629,6 @@ function dump(obj, currentOptions){
 
     return doInitialOutput(options) + dumpObject(obj, {}, [], options);
 }
-
 /*
  * Optional initialization of nodedump
  * 
@@ -640,8 +640,24 @@ function init(options){
 		DEFAULTOPTS[opt] = options[opt];
 	}
 
+	setDumpFunctionName();
+
 	return this;
 }
 
+/*
+ * Sets the name of the global function that can be used to nodedump vars
+ * 
+ * @param {string} fnName
+  */
+function setDumpFunctionName(fnName){
+	if(fnName)
+		DEFAULTOPTS.dumpFunctionName = fnName;
+
+	global[DEFAULTOPTS.dumpFunctionName] = dump;
+}
+
+setDumpFunctionName(); // set the name of the global nodedump function to the default
 // exports
-exports = module.exports = dump;
+exports.dump = dump;
+exports.init = init;

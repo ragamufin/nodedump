@@ -1,5 +1,5 @@
 var http = require('http');
-nodedump = require('nodedump');
+nodedump = require('nodedump').dump;
 
 signIn = function(username, password){
 	// validate username and password
