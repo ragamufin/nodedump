@@ -1,26 +1,25 @@
 {
   "name": "nodedump",
-  "version": "0.0.2",
+  "version": "0.0.21",
   "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag",
-  "main": "bin/nodedump",
-  "bin": {
-    "nodedump": "bin/nodedump.js"
-  },
+  "main": "nodedump.js",
   "scripts": {
-    "test": "echo 'Hello World!'; exit 0"
+    "test": "echo 'Hello World!'"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ragamufin/nodedump.git"
   },
   "keywords": [
-    "cfdump",
-    "log",
-    "variable",
     "debug",
-    "dump"
+    "node",
+    "module",
+    "dump",
+    "variable",
+    "log",
+    "cfdump"
   ],
-  "author": "ragamufin",
+  "author": "andrew hewitt",
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/ragamufin/nodedump/issues"
