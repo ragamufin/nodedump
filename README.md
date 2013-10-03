@@ -70,7 +70,7 @@ USAGE
 
 First, `require` nodedump:
 ```javascript
-require('nodedump');
+nodedump = require('nodedump');
 ```
 
 Then in your view or wherever you output to the browser, whenever you want to dump the contents of a variable do:
@@ -83,7 +83,7 @@ EXAMPLE
 The following example sets up a server, creates a test object and dumps it to the browser. Try it!
 ```javascript
 var http = require('http');
-require('nodedump');
+var nodedump = require('nodedump');
 
 var server = http.createServer(function(request, response) {
 	console.log('Request received',new Date());
@@ -153,7 +153,6 @@ The available options are:
 * `levels` - Number. How many nested levels of an object to dump down to.
 * `sortKeys` - Boolean. Defaults to `true`. Tells nodedump to output the keys of objects sorted alphabetically. If `false`, keys will be output in whatever order node.js returns them (usually the order in which they were added).
 * `syntaxHighlight` - Boolean. Defaults to `true`. Tells whether or not the dump of functions should be syntax highlighted (color-coded).
-* `dumpFunctionName` - String. Defaults to `'nodedump'`. Name to use for the nodedump function. E.g. if this is changed to `'dump'` then instead of doing `nodedump(vartodump)` you can do `dump(vartodump)`.
 
 OPTIONS IN ACTION
 -----------------
@@ -232,10 +231,11 @@ Default options can be overriden by calling the `init` method on nodedump. E.g.
 
 ```javascript
 require('nodedump').init({
-	dumpFunctionName: 'dmp'
+	top: 100
+	,sortKeys: false
 	,expand: false
 });
 ```
 
-The above would cause you to be able to call nodedump using `dmp(vartodump)` and all nodedumps would be output collapsed by default.
+The above would set the default for all nodedumps to output no more than 100 top keys, not sort object keys and show all nodedumps collapsed.
 
