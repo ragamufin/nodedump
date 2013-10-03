@@ -70,20 +70,34 @@ USAGE
 
 First, `require` nodedump:
 ```javascript
-nodedump = require('nodedump');
+require('nodedump');
 ```
 
-Then in your view or wherever you output to the browser, whenever you want to dump the contents of a variable do:
+This will create a global function called `nodedump`. Then in your view or wherever you output to the browser, whenever you want to dump the contents of a variable do:
 ```javascript
 nodedump(vartodump);
 ```
+
+See the [calling nodedump section](#calling-nodedump "calling nodedump section") section for the various ways to call and name the function that is used for dumping.
 
 EXAMPLE 
 -------
 The following example sets up a server, creates a test object and dumps it to the browser. Try it!
 ```javascript
 var http = require('http');
-var nodedump = require('nodedump');
+nodedump = require('nodedump').dump;
+
+signIn = function(username, password){
+	// validate username and password
+	if(!validate(username, password))
+		return false;
+	else 
+		updateSession();
+	
+	// user is signedIn
+	this.signedIn = true;
+	return true;
+};
 
 var server = http.createServer(function(request, response) {
 	console.log('Request received',new Date());
@@ -105,6 +119,7 @@ var server = http.createServer(function(request, response) {
 		,lastName: 'Teague'
 		,age: 21
 		,signedIn: false
+		,signIn: signIn
 		,projects: [
 			{
 				name: 'Allaire Spectra'
@@ -153,6 +168,7 @@ The available options are:
 * `levels` - Number. How many nested levels of an object to dump down to.
 * `sortKeys` - Boolean. Defaults to `true`. Tells nodedump to output the keys of objects sorted alphabetically. If `false`, keys will be output in whatever order node.js returns them (usually the order in which they were added).
 * `syntaxHighlight` - Boolean. Defaults to `true`. Tells whether or not the dump of functions should be syntax highlighted (color-coded).
+* `dumpFunctionName` - String. Defaults to `'nodedump'`. Name to use for the nodedump function. E.g. if this is changed to `'dump'` then in addition to doing `nodedump(vartodump)` you can do `dump(vartodump)`.
 
 OPTIONS IN ACTION
 -----------------
@@ -231,11 +247,33 @@ Default options can be overriden by calling the `init` method on nodedump. E.g.
 
 ```javascript
 require('nodedump').init({
-	top: 100
+	dumpFunctionName: 'dump'
+	,top: 100
 	,sortKeys: false
 	,expand: false
 });
 ```
 
-The above would set the default for all nodedumps to output no more than 100 top keys, not sort object keys and show all nodedumps collapsed.
+The above would set the default for all nodedumps as follows:
+* You could do `dump(vartodump)` instead `nodedump(vartodump)`. Keep in mind that the latter would still work.
+* Output no more than 100 top keys.
+* Not sort object keys.
+* Show all nodedumps collapsed.
+
+CALLING NODEDUMP
+----------------
+
+`require('nodedump')` will create the global function `nodedump` that can be used to dump variables. As you've seen with the [dumpFunctionName option](#options "dumpFunctionName option") you can add another name for the function and use that instead. Another way to do this is to set your variable directly to the `dump` function. E.g.:
+
+```javascript
+d = require('nodedump').dump;
+```
+
+So now you'd be able to dump variables using `d(vartodump)`.
+
+You can do this even when initializing nodedump with default options:
+
+```javascript
+d = require('nodedump').init({ expand: false }).dump;
+```
 
