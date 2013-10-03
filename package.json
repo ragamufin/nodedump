@@ -1,13 +1,13 @@
 {
   "name": "nodedump",
-  "version": "0.0.23",
+  "version": "0.0.2",
   "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag",
   "main": "bin/nodedump",
   "bin": {
-    "nodedump": "nodedump.js"
+    "nodedump": "bin/nodedump.js"
   },
   "scripts": {
-    "test": "demo/index.js"
+    "test": "echo 'Hello World!'; exit 0"
   },
   "repository": {
     "type": "git",
