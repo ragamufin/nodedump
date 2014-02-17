@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>nodedump client side example</title>
+	<script src="nodedump-client.js"></script>
+</head>
+<body>
+	<script>
+		// build object to be dumped
+  		signIn = function(username, password){
+		    // validate username and password
+		    if(!validate(username, password))
+		        return false;
+		    else 
+		        updateSession();
+
+		    // user is signedIn
+		    this.signedIn = true;
+		    return true;
+		};
+
+  		user = {
+	        firstName: 'Charles'
+	        ,lastName: 'Teague'
+	        ,age: 21
+	        ,signedIn: false
+	        ,signIn: signIn
+	        ,projects: [
+	            {
+	                name: 'Allaire Spectra'
+	                , status: 'Horrible death'
+	            }
+	            ,{
+	                name: 'ColdFusion 4.5'
+	                ,status: 'Been there done that'
+	            }
+	        ]
+	    };
+	    
+	    console.log(user);
+
+	    // dump the object
+	    document.write(nodedump(user));
+	</script>
+</body>
+</html>
