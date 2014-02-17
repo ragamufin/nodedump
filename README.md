@@ -2,6 +2,8 @@ nodedump
 ========
 Outputs variables in a visual, easy to read format based on Adobe ColdFusion's `CFDump` tag with enhancements unique to node.js such as the syntax highlighting of functions. Think of it as `console.log` on steroids.
 
+nodedump works both server and client side.
+
 For example, simply doing `nodedump(user)` gives us:
 
 ![nodedump example](https://raw.github.com/ragamufin/nodedump/master/images_for_readme/nodedump-user.png "nodedump of variable 'user'")
@@ -79,6 +81,27 @@ nodedump(vartodump);
 ```
 
 See the [calling nodedump section](#calling-nodedump "calling nodedump section") section for the various ways to call and name the function that is used for dumping.
+
+CLIENT-SIDE
+-----------
+
+To use nodedump client-side simply include the `nodedump-client.js` (available in the nodedump-client directory) file in your page and then dump any variable you'd like. For instance:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+	<title>nodedump client side example</title>
+	<script src="nodedump-client-min.js"></script>
+</head>
+<body>
+	<script>
+	    // dump something
+	    document.write(nodedump(location));
+	</script>
+</body>
+</html>
+```
 
 EXAMPLE 
 -------
