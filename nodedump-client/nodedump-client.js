@@ -1059,6 +1059,16 @@ process.browser = true;
 process.env = {};
 process.argv = [];
 
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
 }
@@ -1665,8 +1675,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require("D:\\Andrew\\DropBox\\Private\\Work\\nodedump\\node_modules\\browserify\\node_modules\\insert-module-globals\\node_modules\\process\\browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":9,"D:\\Andrew\\DropBox\\Private\\Work\\nodedump\\node_modules\\browserify\\node_modules\\insert-module-globals\\node_modules\\process\\browser.js":8,"inherits":7}],11:[function(require,module,exports){
+}).call(this,require("+xKvab"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"+xKvab":8,"./support/isBuffer":9,"inherits":7}],11:[function(require,module,exports){
 (function (global){
 /*
  * @description nodedump - Outputs variables in a visual, easy to read format based on ColdFusion's CFDUMP tag
@@ -2030,7 +2040,6 @@ function escapeHtml(html){
  */
 function getDataType(obj){
 	var dataType = toClass.call( obj );
-	//console.log('dataType:',dataType);
 	dataType = dataType.split(' ')[1];
 	dataType = dataType.substring(0, dataType.length-1);
 
@@ -2103,8 +2112,6 @@ function getPathToCircularRef(obj, cache, currentPath){
  * @returns {string}
  */
 function dumpObject(obj, cache, currentPath, options){
-    //console.log('Dumping');
-	//console.log(obj);
 	// do this on the first call
 	var data = '';
 	var dataType = getDataType(obj);
@@ -2124,7 +2131,6 @@ function dumpObject(obj, cache, currentPath, options){
 		currentPath = [topPath];
 	}
 
-	//console.log('dataType2:',dataType);
 	var bEmpty = false;
 	var bHeader = !isSimpleType;
 
@@ -2183,23 +2189,17 @@ function dumpObject(obj, cache, currentPath, options){
 				// check for circular references
 				var circPath = getPathToCircularRef(obj, cache, currentPath);
 				if(circPath.length > 0){
-					//console.log('circular reference found', currentPath);
 					dataType = CIRCULARREFERENCE;
 					data = doRow(dataType, dataType, circPath.join(CIRCULARSPLITSTRING), options);
 				} else {
 					var subPath;
-					var loopObj;
-					if(dataType === 'Array')
-						loopObj = obj;
-					else {
-						loopObj = [];
-						for(var key in obj)
-							loopObj.push(key);
-						if(options.sortKeys){
-							loopObj.sort(function (a, b) {
-								return a.toLowerCase().localeCompare(b.toLowerCase());
-							});
-						}
+					var loopObj = [];
+					for(var key in obj)
+						loopObj.push(key);
+					if(options.sortKeys){
+						loopObj.sort(function (a, b) {
+							return a.toLowerCase().localeCompare(b.toLowerCase());
+						});
 					}
 
 					cache.level++;
@@ -2211,15 +2211,10 @@ function dumpObject(obj, cache, currentPath, options){
 					var numKeysHidden = 0;
 					var errThrown;
 					for (var i = 0; i < loopObj.length; i++) {
+						key = loopObj[i];
 						errThrown = '';
 						try{
-							if(dataType === 'Array'){
-								key = i;
-								val = loopObj[i];
-							} else {
-								key = loopObj[i];
-								val = obj[key];
-							}
+							val = obj[key];
 						} catch(err){
 							errThrown = err.toString();
 						}

@@ -6,13 +6,15 @@
 
 /*
 * 
-* REQUIRES
-*/
-var util = require('util');
-var hljs = require('./lib/highlight.js/highlight');
+ * requires
+ */
+// var util = require('util');
+var format = require('util').format;
+// var format = require('format').format;
+var hljs = require('./highlight.js/highlight');
 
 /*
- * CONSTANTS
+ * constants
  */
 
 // Default options
@@ -68,18 +70,22 @@ var CSS = '<style type="text/css">\n'
 table.nodedump {\
 	font-size: x-small;\
 	font-family: verdana, arial, helvetica, sans-serif;\
-	border-spacing: 2px;\
+	cell-spacing: 2px;\
 	background-color: #dddddd;\
 	color: #222222;\
 }\
 table.nodedump .nodedump-label { cursor:pointer; }\
+--table.nodedump td, table.nodedump th { background-color: #eeeeee; }\
+--table.nodedump { background-color: #aaaaaa; }\
+--table.nodedump th { text-align: left; color: white; padding: 5px; background-color: #cccccc; }\
+--table.nodedump td { vertical-align : top; padding: 3px; background-color: #eeeeee; }\
 table.nodedump { background-color: #707000; }\
 table.nodedump th { text-align: left; color: white; padding: 5px; background-color: #ADAD00; }\
 table.nodedump td { vertical-align : top; padding: 3px; background-color: #FFFF9E; }\
 \n\
 table.nodedump td.nodedump-data { background-color: #ffffff; }\
 table.nodedump td.nodedump-data pre { line-height:normal; background-color: #ffffff; border:0; padding:0; }\n\
-table.nodedump td.nodedump-data pre code { font-size: small; font-family: Consolas, Menlo, Monaco, Lucida Console, monospace, Courier New, monospace, serif; }\n\
+table.nodedump td.nodedump-data pre code { font-size: small; font-family: Consolas, Menlo, Monaco, Lucida Console, monospace; Courier New, monospace, serif; }\n\
 \n\
 table.nodedump-String { background-color: #888888; }\
 table.nodedump-String td.nodedump-String { background-color: #dddddd; }\
@@ -166,7 +172,7 @@ var JS = "<script type=\"text/javascript\">\n\
 </script>";
 
 /*
- * FUNCTIONS
+ * Methods for building the output
  */
 
 /*
@@ -177,7 +183,7 @@ var JS = "<script type=\"text/javascript\">\n\
  * @returns the output for the table
  */
 function doTable(dataType, data){
-    return util.format(TABLE, dataType, data);
+    return format(TABLE, dataType, data);
 }
 
 /*
@@ -253,7 +259,7 @@ function doCellStyle(options, isSimpleTypeMember){
  * @returns {string}
  */
 function doRowHeader(dataType, data, options){
-	return util.format(ROWHEADER, dataType, doHeaderStyle(dataType, options), data);
+	return format(ROWHEADER, dataType, doHeaderStyle(dataType, options), data);
 }
 
 /*
@@ -267,7 +273,7 @@ function doRowHeader(dataType, data, options){
  * @returns {string}
  */
 function doRow(dataType, key, data, options, isSimpleTypeMember){
-    return util.format(
+    return format(
 		ROW
 		, doRowStyle(dataType, options, isSimpleTypeMember)
 		, dataType
@@ -287,7 +293,7 @@ function doRow(dataType, key, data, options, isSimpleTypeMember){
  * @returns {string}
  */
 function doRowHeader1Col(dataType, data, options){
-    return util.format(ROWHEADER1COL, dataType, doHeaderStyle(dataType, options), data);
+    return format(ROWHEADER1COL, dataType, doHeaderStyle(dataType, options), data);
 }
 
 /*
@@ -299,7 +305,7 @@ function doRowHeader1Col(dataType, data, options){
  * @returns {string}
  */
 function doRow1Col(dataType, data, options, isSimpleTypeMember){
-    return util.format(ROW1COL, doRowStyle(dataType, options, isSimpleTypeMember), data);
+    return format(ROW1COL, doRowStyle(dataType, options, isSimpleTypeMember), data);
 }
 
 /*
@@ -310,7 +316,7 @@ function doRow1Col(dataType, data, options, isSimpleTypeMember){
  * @returns {string}
  */
 function doRowEmpty(dataType, data){
-    return util.format(ROWEMPTY, dataType, data, EMPTY);
+    return format(ROWEMPTY, dataType, data, EMPTY);
 }
 
 /*
@@ -321,7 +327,7 @@ function doRowEmpty(dataType, data){
  * @returns {string}
  */
 function doRowHeaderEmpty(dataType, data){
-    return util.format(ROWHEADEREMPTY, dataType, data, EMPTY);
+    return format(ROWHEADEREMPTY, dataType, data, EMPTY);
 }
 
 /*
@@ -354,7 +360,6 @@ function escapeHtml(html){
  */
 function getDataType(obj){
 	var dataType = toClass.call( obj );
-	//console.log('dataType:',dataType);
 	dataType = dataType.split(' ')[1];
 	dataType = dataType.substring(0, dataType.length-1);
 
@@ -427,8 +432,6 @@ function getPathToCircularRef(obj, cache, currentPath){
  * @returns {string}
  */
 function dumpObject(obj, cache, currentPath, options){
-    //console.log('Dumping');
-	//console.log(obj);
 	// do this on the first call
 	var data = '';
 	var dataType = getDataType(obj);
@@ -448,7 +451,6 @@ function dumpObject(obj, cache, currentPath, options){
 		currentPath = [topPath];
 	}
 
-	//console.log('dataType2:',dataType);
 	var bEmpty = false;
 	var bHeader = !isSimpleType;
 
@@ -507,23 +509,17 @@ function dumpObject(obj, cache, currentPath, options){
 				// check for circular references
 				var circPath = getPathToCircularRef(obj, cache, currentPath);
 				if(circPath.length > 0){
-					//console.log('circular reference found', currentPath);
 					dataType = CIRCULARREFERENCE;
 					data = doRow(dataType, dataType, circPath.join(CIRCULARSPLITSTRING), options);
 				} else {
 					var subPath;
-					var loopObj;
-					if(dataType === 'Array')
-						loopObj = obj;
-					else {
-						loopObj = [];
-						for(var key in obj)
-							loopObj.push(key);
-						if(options.sortKeys){
-							loopObj.sort(function (a, b) {
-								return a.toLowerCase().localeCompare(b.toLowerCase());
-							});
-						}
+					var loopObj = [];
+					for(var key in obj)
+						loopObj.push(key);
+					if(options.sortKeys){
+						loopObj.sort(function (a, b) {
+							return a.toLowerCase().localeCompare(b.toLowerCase());
+						});
 					}
 
 					cache.level++;
@@ -535,15 +531,10 @@ function dumpObject(obj, cache, currentPath, options){
 					var numKeysHidden = 0;
 					var errThrown;
 					for (var i = 0; i < loopObj.length; i++) {
+						key = loopObj[i];
 						errThrown = '';
 						try{
-							if(dataType === 'Array'){
-								key = i;
-								val = loopObj[i];
-							} else {
-								key = loopObj[i];
-								val = obj[key];
-							}
+							val = obj[key];
 						} catch(err){
 							errThrown = err.toString();
 						}
@@ -586,19 +577,19 @@ function dumpObject(obj, cache, currentPath, options){
 						if(bFirstCall){
 							if(numKeysShown !== numTotalKeys){
 								if(options.show){
-									filtered.push(util.format(TITLEFILTEREDSHOWN, numKeysShown, numTotalKeys));
+									filtered.push(format(TITLEFILTEREDSHOWN, numKeysShown, numTotalKeys));
 								} else if(options.hide){
-									filtered.push(util.format(TITLEFILTEREDHIDDEN, numKeysHidden, numTotalKeys));
+									filtered.push(format(TITLEFILTEREDHIDDEN, numKeysHidden, numTotalKeys));
 									numTotalKeys = numTotalKeys - numKeysHidden;
 								}
 								if(!options.show && bFilteredTop)
-									filtered.push(util.format(TITLEFILTEREDTOP, numKeysShown, numTotalKeys));
+									filtered.push(format(TITLEFILTEREDTOP, numKeysShown, numTotalKeys));
 							}
 							if(cache.bFilteredLevel)
-								filtered.push(util.format(TITLEFILTEREDLEVELS, options.levels));
+								filtered.push(format(TITLEFILTEREDLEVELS, options.levels));
 
 							if(filtered.length > 0)
-								label += util.format(TITLEFILTERED, filtered.join(', '));
+								label += format(TITLEFILTERED, filtered.join(', '));
 						}
 						data = doRowHeader(dataType, label, options) + data;
 					}
@@ -629,6 +620,7 @@ function dump(obj, currentOptions){
 
     return doInitialOutput(options) + dumpObject(obj, {}, [], options);
 }
+
 /*
  * Optional initialization of nodedump
  * 

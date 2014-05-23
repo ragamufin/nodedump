@@ -11,7 +11,7 @@ b.add('../nodedump.js');
 // b.bundle().pipe(process.stdout);
 var stream = b.bundle();
 var fl = fs.createWriteStream(file_name);
-stream.on('close', function(){
+fl.on('close', function(){
 	console.log('Finished building: ' + file_name);
 	console.log('Building: ' + file_name_min + ' ...');
 	var result = uglify.minify(fl.path);
