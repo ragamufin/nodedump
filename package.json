@@ -1,10 +1,9 @@
 {
   "name": "nodedump",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "Outputs variables in a visual, easy to read format based on Adobe ColdFusion's CFDump tag. Think of it as console.log on steroids.",
   "main": "nodedump.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/ragamufin/nodedump.git"

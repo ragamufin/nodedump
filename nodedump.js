@@ -11,7 +11,7 @@
 // var util = require('util');
 var format = require('util').format;
 // var format = require('format').format;
-var hljs = require('./highlight.js/highlight');
+var hljs = require('./lib/highlight.js/highlight');
 
 /*
  * constants
