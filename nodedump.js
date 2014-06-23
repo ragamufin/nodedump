@@ -28,6 +28,7 @@ var DEFAULTOPTS = {
 	,sortKeys: true
 	,syntaxHighlight:true
 	,dumpFunctionName: 'nodedump'
+	,showFuncs:true
 };
 
 // used to figure out the datatype of a variable
@@ -568,6 +569,9 @@ function dumpObject(obj, cache, currentPath, options){
 						}
 						subPath = clone(currentPath, 'Array');
 						subPath.push(key);
+						
+						if(!options.showFuncs && typeof(val)==typeof(function(){return this}))continue;
+						
 						data += doRow(dataType, key, dumpObject(val, cache, subPath, options), options, true);
 					}
 					
