@@ -1,199 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = function(hljs) {
-  var KEYWORDS = {
-    keyword:
-      // JS keywords
-      'in if for while finally new do return else break catch instanceof throw try this ' +
-      'switch continue typeof delete debugger super ' +
-      // Coffee keywords
-      'then unless until loop of by when and or is isnt not',
-    literal:
-      // JS literals
-      'true false null undefined ' +
-      // Coffee literals
-      'yes no on off ',
-    reserved: 'case default function var void with const let enum export import native ' +
-      '__hasProp __extends __slice __bind __indexOf'
-  };
-  var JS_IDENT_RE = '[A-Za-z$_][0-9A-Za-z$_]*';
-  var TITLE = {className: 'title', begin: JS_IDENT_RE};
-  var SUBST = {
-    className: 'subst',
-    begin: '#\\{', end: '}',
-    keywords: KEYWORDS,
-    contains: [hljs.BINARY_NUMBER_MODE, hljs.C_NUMBER_MODE]
-  };
-
-  return {
-    keywords: KEYWORDS,
-    contains: [
-      // Numbers
-      hljs.BINARY_NUMBER_MODE,
-      hljs.C_NUMBER_MODE,
-      // Strings
-      hljs.APOS_STRING_MODE,
-      {
-        className: 'string',
-        begin: '"""', end: '"""',
-        contains: [hljs.BACKSLASH_ESCAPE, SUBST]
-      },
-      {
-        className: 'string',
-        begin: '"', end: '"',
-        contains: [hljs.BACKSLASH_ESCAPE, SUBST],
-        relevance: 0
-      },
-      // Comments
-      {
-        className: 'comment',
-        begin: '###', end: '###'
-      },
-      hljs.HASH_COMMENT_MODE,
-      {
-        className: 'regexp',
-        begin: '///', end: '///',
-        contains: [hljs.HASH_COMMENT_MODE]
-      },
-      {
-        className: 'regexp', begin: '//[gim]*'
-      },
-      {
-        className: 'regexp',
-        begin: '/\\S(\\\\.|[^\\n])*/[gim]*' // \S is required to parse x / 2 / 3 as two divisions
-      },
-      {
-        begin: '`', end: '`',
-        excludeBegin: true, excludeEnd: true,
-        subLanguage: 'javascript'
-      },
-      {
-        className: 'function',
-        begin: JS_IDENT_RE + '\\s*=\\s*(\\(.+\\))?\\s*[-=]>',
-        returnBegin: true,
-        contains: [
-          TITLE,
-          {
-            className: 'params',
-            begin: '\\(', end: '\\)'
-          }
-        ]
-      },
-      {
-        className: 'class',
-        beginWithKeyword: true, keywords: 'class',
-        end: '$',
-        illegal: ':',
-        contains: [
-          {
-            beginWithKeyword: true, keywords: 'extends',
-            endsWithParent: true,
-            illegal: ':',
-            contains: [TITLE]
-          },
-          TITLE
-        ]
-      },
-      {
-        className: 'property',
-        begin: '@' + JS_IDENT_RE
-      }
-    ]
-  };
-};
-},{}],2:[function(require,module,exports){
-module.exports = function(hljs) {
-  var FUNCTION = {
-    className: 'function',
-    begin: hljs.IDENT_RE + '\\(', end: '\\)',
-    contains: [hljs.NUMBER_MODE, hljs.APOS_STRING_MODE, hljs.QUOTE_STRING_MODE]
-  };
-  return {
-    case_insensitive: true,
-    illegal: '[=/|\']',
-    contains: [
-      hljs.C_BLOCK_COMMENT_MODE,
-      {
-        className: 'id', begin: '\\#[A-Za-z0-9_-]+'
-      },
-      {
-        className: 'class', begin: '\\.[A-Za-z0-9_-]+',
-        relevance: 0
-      },
-      {
-        className: 'attr_selector',
-        begin: '\\[', end: '\\]',
-        illegal: '$'
-      },
-      {
-        className: 'pseudo',
-        begin: ':(:)?[a-zA-Z0-9\\_\\-\\+\\(\\)\\"\\\']+'
-      },
-      {
-        className: 'at_rule',
-        begin: '@(font-face|page)',
-        lexems: '[a-z-]+',
-        keywords: 'font-face page'
-      },
-      {
-        className: 'at_rule',
-        begin: '@', end: '[{;]', // at_rule eating first "{" is a good thing
-                                 // because it doesn’t let it to be parsed as
-                                 // a rule set but instead drops parser into
-                                 // the default mode which is how it should be.
-        excludeEnd: true,
-        keywords: 'import page media charset',
-        contains: [
-          FUNCTION,
-          hljs.APOS_STRING_MODE, hljs.QUOTE_STRING_MODE,
-          hljs.NUMBER_MODE
-        ]
-      },
-      {
-        className: 'tag', begin: hljs.IDENT_RE,
-        relevance: 0
-      },
-      {
-        className: 'rules',
-        begin: '{', end: '}',
-        illegal: '[^\\s]',
-        relevance: 0,
-        contains: [
-          hljs.C_BLOCK_COMMENT_MODE,
-          {
-            className: 'rule',
-            begin: '[^\\s]', returnBegin: true, end: ';', endsWithParent: true,
-            contains: [
-              {
-                className: 'attribute',
-                begin: '[A-Z\\_\\.\\-]+', end: ':',
-                excludeEnd: true,
-                illegal: '[^\\s]',
-                starts: {
-                  className: 'value',
-                  endsWithParent: true, excludeEnd: true,
-                  contains: [
-                    FUNCTION,
-                    hljs.NUMBER_MODE,
-                    hljs.QUOTE_STRING_MODE,
-                    hljs.APOS_STRING_MODE,
-                    hljs.C_BLOCK_COMMENT_MODE,
-                    {
-                      className: 'hexcolor', begin: '\\#[0-9A-F]+'
-                    },
-                    {
-                      className: 'important', begin: '!important'
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
-};
-},{}],3:[function(require,module,exports){
 var hljs = new function() {
 
   /* Utility functions */
@@ -785,12 +590,12 @@ var hljs = new function() {
   }
 }();
 hljs.LANGUAGES['javascript'] = require('./javascript.js')(hljs);
-hljs.LANGUAGES['xml'] = require('./xml.js')(hljs);
-hljs.LANGUAGES['css'] = require('./css.js')(hljs);
-hljs.LANGUAGES['coffeescript'] = require('./coffeescript.js')(hljs);
-hljs.LANGUAGES['json'] = require('./json.js')(hljs);
+//hljs.LANGUAGES['xml'] = require('./xml.js')(hljs);
+//hljs.LANGUAGES['css'] = require('./css.js')(hljs);
+//hljs.LANGUAGES['coffeescript'] = require('./coffeescript.js')(hljs);
+//hljs.LANGUAGES['json'] = require('./json.js')(hljs);
 module.exports = hljs;
-},{"./coffeescript.js":1,"./css.js":2,"./javascript.js":4,"./json.js":5,"./xml.js":6}],4:[function(require,module,exports){
+},{"./javascript.js":2}],2:[function(require,module,exports){
 module.exports = function(hljs) {
   return {
     keywords: {
@@ -849,147 +654,7 @@ module.exports = function(hljs) {
     ]
   };
 };
-},{}],5:[function(require,module,exports){
-module.exports = function(hljs) {
-  var LITERALS = {literal: 'true false null'};
-  var TYPES = [
-    hljs.QUOTE_STRING_MODE,
-    hljs.C_NUMBER_MODE
-  ];
-  var VALUE_CONTAINER = {
-    className: 'value',
-    end: ',', endsWithParent: true, excludeEnd: true,
-    contains: TYPES,
-    keywords: LITERALS
-  };
-  var OBJECT = {
-    begin: '{', end: '}',
-    contains: [
-      {
-        className: 'attribute',
-        begin: '\\s*"', end: '"\\s*:\\s*', excludeBegin: true, excludeEnd: true,
-        contains: [hljs.BACKSLASH_ESCAPE],
-        illegal: '\\n',
-        starts: VALUE_CONTAINER
-      }
-    ],
-    illegal: '\\S'
-  };
-  var ARRAY = {
-    begin: '\\[', end: '\\]',
-    contains: [hljs.inherit(VALUE_CONTAINER, {className: null})], // inherit is also a workaround for a bug that makes shared modes with endsWithParent compile only the ending of one of the parents
-    illegal: '\\S'
-  };
-  TYPES.splice(TYPES.length, 0, OBJECT, ARRAY);
-  return {
-    contains: TYPES,
-    keywords: LITERALS,
-    illegal: '\\S'
-  };
-};
-},{}],6:[function(require,module,exports){
-module.exports = function(hljs) {
-  var XML_IDENT_RE = '[A-Za-z0-9\\._:-]+';
-  var TAG_INTERNALS = {
-    endsWithParent: true,
-    contains: [
-      {
-        className: 'attribute',
-        begin: XML_IDENT_RE,
-        relevance: 0
-      },
-      {
-        begin: '="', returnBegin: true, end: '"',
-        contains: [{
-            className: 'value',
-            begin: '"', endsWithParent: true
-        }]
-      },
-      {
-        begin: '=\'', returnBegin: true, end: '\'',
-        contains: [{
-          className: 'value',
-          begin: '\'', endsWithParent: true
-        }]
-      },
-      {
-        begin: '=',
-        contains: [{
-          className: 'value',
-          begin: '[^\\s/>]+'
-        }]
-      }
-    ]
-  };
-  return {
-    case_insensitive: true,
-    contains: [
-      {
-        className: 'pi',
-        begin: '<\\?', end: '\\?>',
-        relevance: 10
-      },
-      {
-        className: 'doctype',
-        begin: '<!DOCTYPE', end: '>',
-        relevance: 10,
-        contains: [{begin: '\\[', end: '\\]'}]
-      },
-      {
-        className: 'comment',
-        begin: '<!--', end: '-->',
-        relevance: 10
-      },
-      {
-        className: 'cdata',
-        begin: '<\\!\\[CDATA\\[', end: '\\]\\]>',
-        relevance: 10
-      },
-      {
-        className: 'tag',
-        /*
-        The lookahead pattern (?=...) ensures that 'begin' only matches
-        '<style' as a single word, followed by a whitespace or an
-        ending braket. The '$' is needed for the lexem to be recognized
-        by hljs.subMode() that tests lexems outside the stream.
-        */
-        begin: '<style(?=\\s|>|$)', end: '>',
-        keywords: {title: 'style'},
-        contains: [TAG_INTERNALS],
-        starts: {
-          end: '</style>', returnEnd: true,
-          subLanguage: 'css'
-        }
-      },
-      {
-        className: 'tag',
-        // See the comment in the <style tag about the lookahead pattern
-        begin: '<script(?=\\s|>|$)', end: '>',
-        keywords: {title: 'script'},
-        contains: [TAG_INTERNALS],
-        starts: {
-          end: '</script>', returnEnd: true,
-          subLanguage: 'javascript'
-        }
-      },
-      {
-        begin: '<%', end: '%>',
-        subLanguage: 'vbscript'
-      },
-      {
-        className: 'tag',
-        begin: '</?', end: '/?>',
-        contains: [
-          {
-            className: 'title', begin: '[^ />]+'
-          },
-          TAG_INTERNALS
-        ]
-      }
-    ]
-  };
-};
-},{}],7:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -1014,7 +679,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1079,14 +744,14 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],9:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],10:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1676,7 +1341,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require("+xKvab"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"+xKvab":8,"./support/isBuffer":9,"inherits":7}],11:[function(require,module,exports){
+},{"+xKvab":4,"./support/isBuffer":5,"inherits":3}],7:[function(require,module,exports){
 (function (global){
 /*
  * @description nodedump - Outputs variables in a visual, easy to read format based on ColdFusion's CFDUMP tag
@@ -1691,7 +1356,7 @@ function hasOwnProperty(obj, prop) {
 // var util = require('util');
 var format = require('util').format;
 // var format = require('format').format;
-var hljs = require('./highlight.js/highlight');
+var hljs = require('./lib/highlight.js/highlight');
 
 /*
  * constants
@@ -1699,15 +1364,17 @@ var hljs = require('./highlight.js/highlight');
 
 // Default options
 var DEFAULTOPTS = {
-	expand: true
-	,label:null
-	,show:null
+	collapse: false
+	,dumpFunctionName: 'nodedump'
+	,expand: true
 	,hide:null
-	,top:null
+	,hideTypes:null
+	,label:null
 	,levels: null
+	,show:null
 	,sortKeys: true
 	,syntaxHighlight:true
-	,dumpFunctionName: 'nodedump'
+	,top:null
 };
 
 // used to figure out the datatype of a variable
@@ -1812,7 +1479,7 @@ var JS = "<script type=\"text/javascript\">\n\
 			} // end toggleRow\n\
 \n\
 			,toggleSource: function(source){\n\
-				if (source.style.fontStyle=='italic') {\n\
+				if (source.style.fontStyle == 'italic') {\n\
 					source.style.fontStyle='normal';\n\
 					source.title='" + TITLEEXPANDED + "';\n\
 					return 'open';\n\
@@ -1844,7 +1511,7 @@ var JS = "<script type=\"text/javascript\">\n\
 			} // end toggleTable\n\
 \n\
 			,toggleTarget: function(target,switchToState){\n\
-				target.style.display = (switchToState=='open') ? '' : 'none';\n\
+				target.style.display = (switchToState == 'open') ? '' : 'none';\n\
 			} // end toggleTarget\n\
 		};\n\
 \n\
@@ -1867,67 +1534,45 @@ function doTable(dataType, data){
 }
 
 /*
- * Checks if the current row is expanded or not
- * 
- * @param {object} options
- * @param {boolean} isSimpleTypeMember
- * @returns {isRowExpanded.options|Boolean}
- */
-function isRowExpanded(options, isSimpleTypeMember){
-	return (!isSimpleTypeMember || (options && options.expand == true));
-}
-
-/*
  * Builds the style tag for the headers of tables
  * 
  * @param {string} dataType
- * @param {object} options
+ * @param {Boolean} expand
  * @returns {String|EXPANDEDLABELSTYLE|COLLAPSEDLABELSTYLE}
  */
-function doHeaderStyle(dataType, options){
-	var style = EXPANDEDLABELSTYLE;
-	if(options.expand==false || (typeof options.expand=='object' && options.expand.indexOf(dataType) < 0))
-		style = COLLAPSEDLABELSTYLE;
-
-	return style;
+function doHeaderStyle(dataType, expand){
+	return expand ? EXPANDEDLABELSTYLE : COLLAPSEDLABELSTYLE;
 }
 
 /*
  * Builds the style tag for a row
  * 
  * @param {string} dataType
- * @param {object} options
- * @param {boolean} isSimpleTypeMember
+ * @param {Boolean} expand
  * @returns {COLLAPSEDSTYLE|String}
  */
-function doRowStyle(dataType, options, isSimpleTypeMember){
-	return ((
-			isRowExpanded(options, isSimpleTypeMember)
-			|| (typeof options.expand=='object' && options.expand.indexOf(dataType) > -1)
-			) ? '' : COLLAPSEDSTYLE
-	);
+function doRowStyle(dataType, expand){
+	return expand ? '' : COLLAPSEDSTYLE;
 }
 
 /*
  * Builds the style tag for the label cell
  * 
- * @param {string} options
- * @param {boolean} isSimpleTypeMember
+ * @param {Boolean} expand
  * @returns {String|COLLAPSEDLABELSTYLE|EXPANDEDLABELSTYLE}
  */
-function doCellLabelStyle(options, isSimpleTypeMember){
-	return isRowExpanded(options, isSimpleTypeMember) ? EXPANDEDLABELSTYLE : COLLAPSEDLABELSTYLE;
+function doCellLabelStyle(expand){
+	return expand ? EXPANDEDLABELSTYLE : COLLAPSEDLABELSTYLE;
 }
 
 /*
  * Builds the style tag for the data cell
  * 
- * @param {object} options
- * @param {boolean} isSimpleTypeMember
+ * @param {Boolean} expand
  * @returns {String|COLLAPSEDSTYLE}
  */
-function doCellStyle(options, isSimpleTypeMember){
-	return isRowExpanded(options, isSimpleTypeMember) ? '' : COLLAPSEDSTYLE;
+function doCellStyle(expand){
+	return expand ? '' : COLLAPSEDSTYLE;
 }
 
 /*
@@ -1935,11 +1580,11 @@ function doCellStyle(options, isSimpleTypeMember){
  * 
  * @param {string} dataType
  * @param {string} data
- * @param {object} options
+ * @param {Boolean} expand
  * @returns {string}
  */
-function doRowHeader(dataType, data, options){
-	return format(ROWHEADER, dataType, doHeaderStyle(dataType, options), data);
+function doRowHeader(dataType, data, expand){
+	return format(ROWHEADER, dataType, doHeaderStyle(dataType, expand), data);
 }
 
 /*
@@ -1948,18 +1593,18 @@ function doRowHeader(dataType, data, options){
  * @param {string} dataType
  * @param {string} key
  * @param {string} data
- * @param {object} options
- * @param {boolean} isSimpleTypeMember
+ * @param {Boolean} expand
+ * @param {Boolean} expandCell
  * @returns {string}
  */
-function doRow(dataType, key, data, options, isSimpleTypeMember){
+function doRow(dataType, key, data, expand, expandCell){
     return format(
 		ROW
-		, doRowStyle(dataType, options, isSimpleTypeMember)
+		, doRowStyle(dataType, expand)
 		, dataType
-		, doCellLabelStyle(options, isSimpleTypeMember)
+		, doCellLabelStyle(expandCell)
 		, key
-		, doCellStyle(options, isSimpleTypeMember)
+		, doCellStyle(expandCell)
 		, data
 	);
 }
@@ -1969,23 +1614,22 @@ function doRow(dataType, key, data, options, isSimpleTypeMember){
  * 
  * @param {string} dataType
  * @param {string} data
- * @param {object} options
+ * @param {Boolean} expand
  * @returns {string}
  */
-function doRowHeader1Col(dataType, data, options){
-    return format(ROWHEADER1COL, dataType, doHeaderStyle(dataType, options), data);
+function doRowHeader1Col(dataType, data, expand){
+    return format(ROWHEADER1COL, dataType, doHeaderStyle(dataType, expand), data);
 }
 
 /*
  * Builds the 1 column row
  * @param {string} dataType
  * @param {string} data
- * @param {object} options
- * @param {boolean} isSimpleTypeMember
+ * @param {Boolean} expand
  * @returns {string}
  */
-function doRow1Col(dataType, data, options, isSimpleTypeMember){
-    return format(ROW1COL, doRowStyle(dataType, options, isSimpleTypeMember), data);
+function doRow1Col(dataType, data, expand){
+    return format(ROW1COL, doRowStyle(dataType, expand), data);
 }
 
 /*
@@ -2118,6 +1762,9 @@ function dumpObject(obj, cache, currentPath, options){
 	var isSimpleType = (SIMPLETYPES.indexOf(dataType) >= 0);
 	var bFirstCall = (currentPath.length == 0);
 	var label = dataType;
+	var expand = true;
+	var expandCells = true;
+
 	if(bFirstCall){
 		var topPath = TOP;
 		cache.bFilteredLevel = false;
@@ -2139,7 +1786,7 @@ function dumpObject(obj, cache, currentPath, options){
 		switch(dataType){
 			case 'Boolean':
 				var val = '<span class="'+(obj ? 'nodedump-yes' : 'nodedump-no')+'">' + obj + '</span>';
-				data = doRow(dataType, label, val, options);
+				data = doRow(dataType, label, val, expand, expandCells);
 			break;
 			case 'String':
 				if(obj.length === 0)
@@ -2147,30 +1794,44 @@ function dumpObject(obj, cache, currentPath, options){
 				else {
 					var val = escapeHtml(obj);
 					//var val = '<pre><code class="lang-html">' + hljs.highlight('xml', obj).value + '</code></pre>';
-					data = doRow(dataType, label, val, options);
+					data = doRow(dataType, label, val, expand, expandCells);
 				}
 			break;
 			case 'Math':
 			case 'Undefined':
 			case 'Null':
-				data = doRow1Col(dataType, label, options, false);
+				data = doRow1Col(dataType, label, expand);
 			break;
 			default:
-				data = doRow(dataType, label, obj.toString(), options);
+				data = doRow(dataType, label, obj.toString(), expand, expandCells);
 			break;
 		}
 
-	} else { // Non-Object types
+	} else { // Non-Simple types
+
+		// figure out if it should be expanded/collapsed
+		expand = options.expand;
+		if(typeof options.expand == 'object'){
+			expand = expand.indexOf(dataType) > -1 || expand.indexOf(dataType.toLowerCase()) > -1;
+		}
+		if(expand){
+			if(options.collapse == true || (
+					typeof options.collapse == 'object' 
+					&& (options.collapse.indexOf(dataType) > -1 || options.collapse.indexOf(dataType.toLowerCase()) > -1)
+				)
+			)
+				expand = false;
+		}
 
 		switch(dataType){
 			case 'RegExp':
 			case 'Error':
-				data += doRowHeader1Col(dataType, label, options);
-				data += doRow1Col(dataType, obj.toString(), options, true);
+				data += doRowHeader1Col(dataType, label, expand);
+				data += doRow1Col(dataType, obj.toString(), expand);
 			break;
 			case 'Function':
 				bHeader = true;
-				data += doRowHeader1Col(dataType, label, options);
+				data += doRowHeader1Col(dataType, label, expand);
 				var txt = obj.toString();
 				if(options.syntaxHighlight){
 					var purtyText = hljs.highlight('javascript', txt);
@@ -2180,23 +1841,28 @@ function dumpObject(obj, cache, currentPath, options){
 					var txt = escapeHtml(obj.toString());
 				}
 
-				data += doRow1Col(dataType, '<pre><code class="lang-javascript">'+txt+'</code></pre>', options, true);
-				//data += doRow1Col(dataType, '<pre><code>'+escapeHtml(obj.toString())+'</code></pre>', options, true);
+				data += doRow1Col(dataType, '<pre><code class="lang-javascript">'+txt+'</code></pre>', expand);
+				//data += doRow1Col(dataType, '<pre><code>'+escapeHtml(obj.toString())+'</code></pre>', expand);
 			break;
 			case 'Array':
 			case 'Object':
 			default:
+				// set keys to collapse if an array of types was passed for expand and the current data-type is one of them
+				expandCells = expand;
+				if(typeof options.expand == 'object' && expand)
+					expandCells = false;
+
 				// check for circular references
 				var circPath = getPathToCircularRef(obj, cache, currentPath);
 				if(circPath.length > 0){
 					dataType = CIRCULARREFERENCE;
-					data = doRow(dataType, dataType, circPath.join(CIRCULARSPLITSTRING), options);
+					data = doRow(dataType, dataType, circPath.join(CIRCULARSPLITSTRING), expand);
 				} else {
 					var subPath;
 					var loopObj = [];
 					for(var key in obj)
 						loopObj.push(key);
-					if(options.sortKeys){
+					if(dataType != 'Array' && options.sortKeys){
 						loopObj.sort(function (a, b) {
 							return a.toLowerCase().localeCompare(b.toLowerCase());
 						});
@@ -2219,10 +1885,10 @@ function dumpObject(obj, cache, currentPath, options){
 							errThrown = err.toString();
 						}
 						if(bFirstCall){
-							if(!(!options.show || (options.show.length && options.show.indexOf(key) >= 0))){
+							if(!(!options.show || (options.show.length && (options.show.indexOf(key) >= 0 || options.show.indexOf(Number(key)) >= 0)))){
 								numKeysHidden++;
 								continue;
-							} else if(options.hide && options.hide.length && options.hide.indexOf(key) >= 0){
+							} else if(options.hide && options.hide.length && (options.hide.indexOf(key) >= 0 || options.hide.indexOf(Number(key)) >= 0)){
 								numKeysHidden++;
 								continue;
 							}
@@ -2231,24 +1897,33 @@ function dumpObject(obj, cache, currentPath, options){
 								break;
 							}
 						}
+						// skip any data types that should be hidden
+						if(options.hideTypes){
+							var subDataType = getDataType(val);
+							if(options.hideTypes.indexOf(subDataType) > -1 || options.hideTypes.indexOf(subDataType.toLowerCase()) > -1){
+								numKeysHidden++;
+								continue;
+							}
+						}
 
 						numKeysShown++;
 						if(options.levels !== null && currentPath.length > options.levels){
 							cache.bFilteredLevel = true;
-							data += doRow(dataType, key, '', options, true);
+							data += doRow(dataType, key, '', true);
 							continue;
 						}
 						
 						if(errThrown.length > 0){
-							var errorRow = doRowHeader1Col(ERRORDATATYPE, ERRORDATATYPE, options)
-											+ doRow1Col(ERRORDATATYPE, '<pre><code class="lang-javascript">'+hljs.highlight('javascript', errThrown).value+'</code></pre>', options, true);
-											//+ doRow1Col(ERRORDATATYPE, errThrown, options, true);
-							data += doRow(dataType, key, doTable(ERRORDATATYPE, errorRow), options, false);
+							var errorRow = doRowHeader1Col(ERRORDATATYPE, ERRORDATATYPE, true)
+											+ doRow1Col(ERRORDATATYPE, '<pre><code class="lang-javascript">'+hljs.highlight('javascript', errThrown).value+'</code></pre>', true);
+											//+ doRow1Col(ERRORDATATYPE, errThrown, true);
+							data += doRow(dataType, key, doTable(ERRORDATATYPE, errorRow), expandCells);
 							continue;
 						}
 						subPath = clone(currentPath, 'Array');
 						subPath.push(key);
-						data += doRow(dataType, key, dumpObject(val, cache, subPath, options), options, true);
+
+						data += doRow(dataType, key, dumpObject(val, cache, subPath, options), expand, expandCells);
 					}
 					
 					if(numTotalKeys === 0)
@@ -2256,22 +1931,26 @@ function dumpObject(obj, cache, currentPath, options){
 					else {
 						if(bFirstCall){
 							if(numKeysShown !== numTotalKeys){
-								if(options.show){
+								if(options.show || options.hideTypes){
 									filtered.push(format(TITLEFILTEREDSHOWN, numKeysShown, numTotalKeys));
 								} else if(options.hide){
 									filtered.push(format(TITLEFILTEREDHIDDEN, numKeysHidden, numTotalKeys));
 									numTotalKeys = numTotalKeys - numKeysHidden;
 								}
-								if(!options.show && bFilteredTop)
+								if(!(options.show || options.hideTypes) && bFilteredTop)
 									filtered.push(format(TITLEFILTEREDTOP, numKeysShown, numTotalKeys));
 							}
 							if(cache.bFilteredLevel)
 								filtered.push(format(TITLEFILTEREDLEVELS, options.levels));
 
-							if(filtered.length > 0)
-								label += format(TITLEFILTERED, filtered.join(', '));
+						} else if(options.hideTypes && numKeysShown !== numTotalKeys){
+							// show the filtered label for types being hidden
+							filtered.push(format(TITLEFILTEREDSHOWN, numKeysShown, numTotalKeys));
 						}
-						data = doRowHeader(dataType, label, options) + data;
+						if(filtered.length > 0)
+							label += format(TITLEFILTERED, filtered.join(', '));
+
+						data = doRowHeader(dataType, label, expand) + data;
 					}
 				}
 			break;
@@ -2334,4 +2013,4 @@ setDumpFunctionName(); // set the name of the global nodedump function to the de
 exports.dump = dump;
 exports.init = init;
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./highlight.js/highlight":3,"util":10}]},{},[11])
+},{"./lib/highlight.js/highlight":1,"util":6}]},{},[7])
